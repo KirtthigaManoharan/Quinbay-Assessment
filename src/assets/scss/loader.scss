@@ -1,0 +1,92 @@
+.flexbox {
+    display: block;
+  }
+  .flexbox > div {
+    justify-content: center;
+    min-height: 80vh;
+    max-height: 100vh;
+    flex: 0 0 25%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .mesh-loader {
+    overflow: hidden;
+    height: inherit;
+    width: inherit;
+  }
+  .mesh-loader .circle {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    background: #FF9061;
+    border-radius: 50%;
+    margin: -15px;
+    animation: mesh 3s ease-in-out infinite -1.5s;
+  }
+  .mesh-loader > div .circle:last-child {
+    animation-delay: 0s;
+  }
+  .mesh-loader > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+  .mesh-loader > div:last-child {
+    transform: rotate(90deg);
+  }
+  @-webkit-keyframes mesh {
+    0% {
+      transform-origin: 50% -100%;
+      transform: rotate(0);
+    }
+    50% {
+      transform-origin: 50% -100%;
+      transform: rotate(360deg);
+    }
+    50.1% {
+      transform-origin: 50% 200%;
+      transform: rotate(0deg);
+    }
+    100% {
+      transform-origin: 50% 200%;
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes mesh {
+    0% {
+      transform-origin: 50% -100%;
+      transform: rotate(0);
+    }
+    50% {
+      transform-origin: 50% -100%;
+      transform: rotate(360deg);
+    }
+    50.1% {
+      transform-origin: 50% 200%;
+      transform: rotate(0deg);
+    }
+    100% {
+      transform-origin: 50% 200%;
+      transform: rotate(360deg);
+    }
+  }
+  @media only screen and (max-width: 968px) {
+    .flexbox > div {
+      flex: 0 0 33.3333333%;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .flexbox > div {
+      flex: 0 0 50%;
+    }
+  }
+  @media only screen and (max-width: 568px) {
+    .flexbox > div {
+      flex: 0 0 100%;
+    }
+  }
