@@ -4,6 +4,7 @@ import axios from "axios";
 //Pages
 import { Header } from "./Header";
 import { ProductsCard } from "./ProductsCard";
+const _ = require('lodash');
 
 //Assets
 import "../../assets/scss/styles.scss";
@@ -20,18 +21,22 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [productDetailedView, setProductDetailedView] = useState("");
+  const [flowType, setFlowType] = useState("Default");
 
   const handleInput = (e) => {
+    setPageIndex(0);
     setSearchValue(e.target.value);
-    fetchDataFromAPI(pageIndex);
+    setFlowType("Input Search");
   };
 
   const clearSearch = () => {
     setSearchValue("");
+    setPageIndex(0);
+    setFlowType("Input Search");
   };
 
   const handlePageClick = (event) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setFlowType("Pagination")
     setPageIndex(event.selected);
   };
 
@@ -40,22 +45,40 @@ const Products = () => {
     setProductDetailedView(data?.uniqueSellingPoint);
   }
 
+  const scrollHandler = () => {
+    window.onscroll = function(ev) {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        setFlowType('Scroll');
+        setPageIndex(pageIndex + 1)
+      }
+    };
+  }
+
   useEffect(() => {
-    fetchDataFromAPI(pageIndex);
+    fetchDataFromAPI();
   }, [searchValue, pageIndex]);
 
-  const fetchDataFromAPI = (pageNo) => {
-    setLoading(true);
-    if(searchValue !== "") {
+  useEffect(() => {
+    window.addEventListener("scroll", _.throttle(scrollHandler, 1000));
+  },[pageIndex])
+
+  const fetchDataFromAPI = () => {
+    if(flowType !== 'Scroll') {
+      setLoading(true);
+    }
+
+    if( flowType === 'Pagination') {
+      setProductData([]);
+      for(let i=0; i<= pageIndex ; i++) {
       axios
         .get(
-          `https://www.blibli.com/backend/search/products?searchTerm=${searchValue}&start=${pageNo}&itemPerPage=24`
+          `https://www.blibli.com/backend/search/products?searchTerm=${searchValue ? searchValue : null}&start=${i}&itemPerPage=24`
         )
         .then((res) => {
           if (res && res.status === 200) {
             let { data } = res.data;
             setTotalPageCount(data?.paging?.total_page);
-            setProductData(data?.products);
+            setProductData((prevState) => [...prevState, ...data?.products])
             setLoading(false);
           }
         })
@@ -63,6 +86,32 @@ const Products = () => {
           setDisplayErrorMsg(true);
           setLoading(false);
         });
+      }
+    } else {
+      axios
+      .get(
+        `https://www.blibli.com/backend/search/products?searchTerm=${searchValue ? searchValue : null}&start=${pageIndex}&itemPerPage=24`
+      )
+      .then((res) => {
+        if (res && res.status === 200) {
+          let { data } = res?.data;
+          setTotalPageCount(data?.paging?.total_page);
+
+          if(flowType === 'Input Search') {
+            setProductData(data?.products)
+          } else if(flowType === 'Default') {
+            setProductData(data?.products)
+          } else if(flowType === 'Scroll') {
+            setProductData((prevState) => [...prevState, ...data?.products])
+          }
+
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        setDisplayErrorMsg(true);
+        setLoading(false);
+      });
     }
   };
   

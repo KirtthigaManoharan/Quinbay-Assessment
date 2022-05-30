@@ -170,13 +170,18 @@
     }
 
     .pagination-container {
+      background-color: #FFF3DA;
+      position: fixed;
+      bottom: 0;
+      z-index: 2;
+      width: 100%;
       > ul {
         padding-left: 0px;
         width: 60%;
         display: flex;
         justify-content: center;
         margin: 0px auto;
-        padding: 20px 0px 40px;
+        padding: 10px 0px;
         .selected {
           color: #4CAF50;
         }
@@ -210,6 +215,7 @@
       .products-display-container {
         grid-template-columns: repeat(auto-fill,300px);
         overflow-x: hidden;
+        margin-bottom: 60px;
         .display-card {
           max-height: 100%;
           padding-bottom: 22px;
@@ -275,6 +281,7 @@
     .products-card-wrapper {
       .products-display-container {
         grid-template-columns: repeat(auto-fill,335px);
+        margin-bottom: 60px;
         .display-card {
           max-height: 100%;
           padding-bottom: 14px;

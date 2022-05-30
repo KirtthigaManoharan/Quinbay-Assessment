@@ -22,7 +22,7 @@ export default class SimpleSlider extends Component {
     return (
       <div>
         <Slider {...settings}>
-          {sliderImages.map((data, ind) => {
+          {sliderImages?.map((data, ind) => {
             return (
               <div key={ind}>
                 <img src={data} />

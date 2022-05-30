@@ -21,11 +21,11 @@ export const ProductsCard = ({
       {!displayErrorMsg ? (
         productData && (
           <>
-          {searchValue !== "" &&
-            <p className='search-items-found'>{itemsPerPage} Items found for <b>{searchValue}</b> in Page {pageIndex + 1}</p>
+          {searchValue &&
+            <p className='search-items-found'>{(pageIndex + 1) * itemsPerPage} Items found for <b>{searchValue}</b></p>
           }
             <ul className="products-display-container">
-              {productData.map((data, index) => {
+              {productData?.map((data, index) => {
                 return data.status === "AVAILABLE" &&
                  (
                   <li className="display-card" key={index}>
